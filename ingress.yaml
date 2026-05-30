@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aneissh91-echo-app-ingress
+  namespace: aneissh91-eks-activity
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: "aneissh91-echoapp.sctp-sandbox.com"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - "aneissh91-echoapp.sctp-sandbox.com"
+      secretName: aneissh91-tls
+  rules:
+    - host: "aneissh91-echoapp.sctp-sandbox.com"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: aneissh91-echo-service
+                port:
+                  number: 80
